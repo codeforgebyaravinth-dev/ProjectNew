@@ -1,0 +1,34 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "plugins": [
+    { "name": "PostgreSQL" }
+  ],
+  "services": [
+    {
+      "name": "keycloak",
+      "source": { "type": "dockerfile", "path": "." },
+      "envs": [
+        { "key": "KC_DB", "value": "postgres" },
+        {
+          "key": "KC_DB_URL",
+          "fromService": { "name": "PostgreSQL", "property": "connectionString" }
+        },
+        {
+          "key": "KC_DB_USERNAME",
+          "fromService": { "name": "PostgreSQL", "property": "user" }
+        },
+        {
+          "key": "KC_DB_PASSWORD",
+          "fromService": { "name": "PostgreSQL", "property": "password" }
+        },
+        { "key": "KC_PROXY", "value": "edge" },
+        { "key": "KC_HOSTNAME_STRICT", "value": "false" },
+        { "key": "KC_HTTP_ENABLED", "value": "true" },
+        { "key": "KEYCLOAK_ADMIN", "value": "admin" },
+        { "key": "KEYCLOAK_ADMIN_PASSWORD", "value": "SuperSecurePassword@123" }
+      ],
+      "startCommand": "bash /opt/keycloak/docker-entrypoint.sh",
+      "autoDeploy": true
+    }
+  ]
+}
